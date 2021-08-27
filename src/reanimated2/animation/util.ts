@@ -200,7 +200,11 @@ type AnimationToDecoration<
 
 export function defineAnimation<
   T extends AnimationObject | StyleLayoutAnimation
->(starting: AnimationToDecoration<T>, factory: () => T): T {
+>(
+  starting: AnimationToDecoration<T>,
+  factory: () => T,
+  applyDecorator = true
+): T {
   'worklet';
   if (IN_STYLE_UPDATER) {
     return starting as T;
@@ -208,7 +212,9 @@ export function defineAnimation<
   const create = () => {
     'worklet';
     const animation = factory();
-    decorateAnimation<T>(animation);
+    if (applyDecorator) {
+      decorateAnimation<T>(animation);
+    }
     return animation;
   };
 
